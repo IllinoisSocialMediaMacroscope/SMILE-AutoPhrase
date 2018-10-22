@@ -3,6 +3,7 @@ from os import listdir
 from os.path import isfile, join
 import argparse
 import json
+import notification as n
 
 def main(remoteSavePath):
     for file in listdir('results'):
@@ -15,6 +16,8 @@ if __name__ == '__main__':
     parser.add_argument('--remoteReadPath', required=True)
     parser.add_argument('--column', required=True)
     parser.add_argument('--minSup', required=True)
+    parser.add_argument('--email', required=True)
+    parser.add_argument('--sessionURL', required=True)
     args = parser.parse_args()
 
     # save parameters
@@ -23,3 +26,5 @@ if __name__ == '__main__':
         json.dump(vars(args), f)
 
     main(args.remoteSavePath)
+    n.notification(args.email, case=3, filename=args.remoteSavePath, links=[],
+                   sessionURL=args.sessionURL)

@@ -122,6 +122,8 @@ java $TOKENIZER -m translate -i tmp/final_quality_salient.txt -o ${RESULTS}/Auto
 ### upload results to s3 bucket ###
 echo ${green}===Upload Results to S3 Bucket===${reset}
 REMOTE_SAVE_PATH=$4
-python3 upload_results.py --remoteSavePath ${REMOTE_SAVE_PATH} --remoteReadPath ${REMOTE_READ_PATH} --column ${COLUMN} --minSup ${MIN_SUP}
+EMAIL=$5
+SESSIONURL=$6
+python3 upload_results.py --remoteSavePath ${REMOTE_SAVE_PATH} --remoteReadPath ${REMOTE_READ_PATH} --column ${COLUMN} --minSup ${MIN_SUP} --email ${EMAIL} --sessionURL ${SESSIONURL}
 
 
