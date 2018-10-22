@@ -14,3 +14,4 @@ RUN pip3 install numpy pandas boto3
 
 # switch work directory to be AutoPhrase
 RUN cd /AutoPhrase && /bin/bash -c "source compile.sh"
+WORKDIR /AutoPhrase

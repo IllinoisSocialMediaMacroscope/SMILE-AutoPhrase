@@ -1,0 +1,1 @@
+./auto_phrase.sh local/GraphQL/reddit-Search/trump12/ title 3 local/NLP/AutoPhrase
