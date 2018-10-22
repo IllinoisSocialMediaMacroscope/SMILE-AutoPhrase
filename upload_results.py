@@ -6,9 +6,29 @@ import json
 import notification as n
 
 def main(remoteSavePath):
+
+    output = {}
+
     for file in listdir('results'):
         if isfile(join('results', file)):
             s3.upload('results', remoteSavePath, file)
+
+            if file == 'config.json':
+                output['config'] = s3.generate_downloads(remoteSavePath, file)
+            elif file == 'AutoPhrase_multi-words.txt':
+                output['multi-words'] = s3.generate_downloads(remoteSavePath, file)
+            elif file == 'AutoPhrase_single-word.txt':
+                output['single-word'] = s3.generate_downloads(remoteSavePath, file)
+            elif file == 'AutoPhrase.txt':
+                output['autophrase'] = s3.generate_downloads(remoteSavePath, file)
+            elif file == 'segmentation.model':
+                output['model'] = s3.generate_downloads(remoteSavePath, file)
+            elif file == 'token_mapping.txt':
+                output['token-mapping'] = s3.generate_downloads(remoteSavePath, file)
+            else:
+                output['misc'] = s3.generate_downloads(remoteSavePath, file)
+
+    return output
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -25,6 +45,6 @@ if __name__ == '__main__':
     with open(join('results', fname), "w") as f:
         json.dump(vars(args), f)
 
-    main(args.remoteSavePath)
-    n.notification(args.email, case=3, filename=args.remoteSavePath, links=[],
+    links = main(args.remoteSavePath)
+    n.notification(args.email, case=3, filename=args.remoteSavePath, links=links,
                    sessionURL=args.sessionURL)
