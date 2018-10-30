@@ -15,6 +15,8 @@ def main(remoteSavePath):
 
             if file == 'config.json':
                 output['config'] = s3.generate_downloads(remoteSavePath, file)
+            elif file == 'div.html':
+                output['visualization'] = s3.generate_downloads(remoteSavePath, file)
             elif file == 'AutoPhrase_multi-words.txt':
                 output['multi-words'] = s3.generate_downloads(remoteSavePath, file)
             elif file == 'AutoPhrase_single-word.txt':

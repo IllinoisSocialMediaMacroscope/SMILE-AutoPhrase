@@ -10,7 +10,7 @@ RUN apt-get -y install g++
 RUN apt-get -y install openjdk-8-jdk
 RUN apt-get -y install curl
 RUN apt-get -y install python3-pip
-RUN pip3 install numpy pandas boto3
+RUN pip3 install numpy pandas boto3 plotly
 
 # switch work directory to be AutoPhrase
 RUN cd /AutoPhrase && /bin/bash -c "source compile.sh"

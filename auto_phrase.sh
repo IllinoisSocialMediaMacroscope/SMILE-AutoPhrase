@@ -119,6 +119,10 @@ java $TOKENIZER -m translate -i tmp/final_quality_multi-words.txt -o ${RESULTS}/
 java $TOKENIZER -m translate -i tmp/final_quality_unigrams.txt -o ${RESULTS}/AutoPhrase_single-word.txt -t $TOKEN_MAPPING -c N -thread $THREAD
 java $TOKENIZER -m translate -i tmp/final_quality_salient.txt -o ${RESULTS}/AutoPhrase.txt -t $TOKEN_MAPPING -c N -thread $THREAD
 
+### plot word cloud ###
+echo ${green}===Plot Word Cloud===${reset}
+python3 word_cloud.py
+
 ### upload results to s3 bucket ###
 echo ${green}===Upload Results to S3 Bucket===${reset}
 REMOTE_SAVE_PATH=$4
