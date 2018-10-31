@@ -4,6 +4,7 @@ import plotly.graph_objs as go
 from plotly.offline import plot
 import random
 import numpy as np
+import os
 
 def word_cloud(words, scores):
 
@@ -61,7 +62,7 @@ def word_cloud(words, scores):
     div = plot(fig, output_type="div", image='png', auto_open=False,
                image_filename="word_cloud_img")
     fname_div = 'div.html'
-    with open(fname_div, "w") as f:
+    with open(os.path.join('results', fname_div), "w") as f:
         f.write(div)
 
 
