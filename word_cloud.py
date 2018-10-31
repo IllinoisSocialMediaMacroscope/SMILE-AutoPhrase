@@ -67,7 +67,7 @@ def word_cloud(words, scores):
 
 if __name__ == '__main__':
 
-    phrases = pd.read_csv('AutoPhrase.txt', delimiter='\t', header=None,
+    phrases = pd.read_csv('./results/AutoPhrase.txt', delimiter='\t', header=None,
                           names=['ranking_score', 'phrases'])
     words = list(phrases['phrases'].values[:30])
     scores = list(phrases['ranking_score'].values[:30])
