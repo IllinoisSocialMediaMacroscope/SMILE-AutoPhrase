@@ -8,7 +8,7 @@ import os
 
 def word_cloud(words, scores):
 
-    lower, upper = 10, 35
+    lower, upper = 8, 25
     frequency = [(((x - min(scores)) / (max(scores) - min(scores))) ** 4) * (
                 upper - lower) + lower for x in scores]
     colors = [py.colors.DEFAULT_PLOTLY_COLORS[random.randrange(1, 10)] for
