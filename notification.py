@@ -7,9 +7,9 @@ def notification(toaddr, case, filename, links, sessionURL):
     # toaddr -- email address to send to
     # text content to send
     # subject
-    host = '***REMOVED***'
+    host = 'smtp.mail.us-east-1.awsapps.com'
     port = '465'
-    fromaddr = '***REMOVED***'
+    fromaddr = 'smile@socialmediamacroscope.awsapps.com'
 
     # map the fpath component to History panel names
     # local/NLP/sentiment/xxxxxxxxxxxxxxxxxxxxxxxx/ => [local,nlp,sentiment,xxxx,space]
