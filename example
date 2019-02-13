@@ -1,1 +1,3 @@
 ./auto_phrase.sh local/GraphQL/reddit-Search/trump12/ title 3 local/NLP/AutoPhrase
+./auto_phrase.sh cwang138/GraphQL/twitter-Tweet/trump/ text 3 cwang138/NLP/AutoPhrase cwang138@illinois.edu placeholder.com
+./auto_phrase.sh --remoteReadPath cwang138/GraphQL/twitter-Tweet/trump/ --column text --minSup 3 --email cwang138@illinois.edu --remoteSavePath cwang138/NLP/AutoPhrase/aaaaa/ --sessionURL placeholder.com
