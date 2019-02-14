@@ -48,7 +48,7 @@ if __name__ == '__main__':
     with open(join('results', fname), "w") as f:
         json.dump(vars(args), f)
 
-    remoteSavePath = args.s3FolderName + '/NLP/autophrase/' + args.uid +'/',
-    links = main(args.remoteSavePath)
-    n.notification(args.email, case=3, filename=remoteSavePath, links=links,
+    awsPath = args.s3FolderName + '/NLP/autophrase/'+ args.uid + '/'
+    links = main(awsPath)
+    n.notification(args.email, case=3, filename=awsPath, links=links,
                    sessionURL=args.sessionURL)
