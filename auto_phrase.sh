@@ -18,8 +18,13 @@ case $key in
     shift # past argument
     shift # past value
     ;;
-    --remoteSavePath)
-    REMOTE_SAVE_PATH="$2"
+    --uid)
+    UUID="$2"
+    shift # past argument
+    shift # pass value
+    ;;
+     --s3FolderName)
+    S3FOLDERNAME="$2"
     shift # past argument
     shift # pass value
     ;;
@@ -43,7 +48,8 @@ set -- "${POSITIONAL[@]}" # restore positional parameters
 echo $REMOTE_READ_PATH
 echo $COLUMN
 echo $MIN_SUP
-echo $REMOTE_SAVE_PATH
+echo $UUID
+echo $S3FOLDERNAME
 echo $EMAIL
 echo $SESSIONURL
 
@@ -170,6 +176,6 @@ python3 word_cloud.py
 
 ### upload results to s3 bucket ###
 echo ${green}===Upload Results to S3 Bucket===${reset}
-python3 upload_results.py --remoteSavePath ${REMOTE_SAVE_PATH} --remoteReadPath ${REMOTE_READ_PATH} --column ${COLUMN} --minSup ${MIN_SUP} --email ${EMAIL} --sessionURL ${SESSIONURL}
+python3 upload_results.py --uid ${UUID} --s3FolderName ${S3FOLDERNAME} --remoteReadPath ${REMOTE_READ_PATH} --column ${COLUMN} --minSup ${MIN_SUP} --email ${EMAIL} --sessionURL ${SESSIONURL}
 
 

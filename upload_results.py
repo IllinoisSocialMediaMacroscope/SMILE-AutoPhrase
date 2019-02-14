@@ -34,7 +34,8 @@ def main(remoteSavePath):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--remoteSavePath', required=True)
+    parser.add_argument('--uid', required=True)
+    parser.add_argument('--s3FolderName', required=True)
     parser.add_argument('--remoteReadPath', required=True)
     parser.add_argument('--column', required=True)
     parser.add_argument('--minSup', required=True)
@@ -47,6 +48,7 @@ if __name__ == '__main__':
     with open(join('results', fname), "w") as f:
         json.dump(vars(args), f)
 
+    remoteSavePath = args.s3FolderName + '/NLP/autophrase/' + args.uid +'/',
     links = main(args.remoteSavePath)
-    n.notification(args.email, case=3, filename=args.remoteSavePath, links=links,
+    n.notification(args.email, case=3, filename=remoteSavePath, links=links,
                    sessionURL=args.sessionURL)
