@@ -3,13 +3,14 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 
-def notification(toaddr, case, filename, links, sessionURL):
+def notification(toaddr,case,filename,links,sessionURL):
     # toaddr -- email address to send to
     # text content to send
     # subject
     host = 'smtp.mail.us-east-1.awsapps.com'
     port = '465'
     fromaddr = 'smile@socialmediamacroscope.awsapps.com'
+    
 
     # map the fpath component to History panel names
     # local/NLP/sentiment/xxxxxxxxxxxxxxxxxxxxxxxx/ => [local,nlp,sentiment,xxxx,space]
@@ -17,7 +18,7 @@ def notification(toaddr, case, filename, links, sessionURL):
     # 0         1          2        3
     if filename != '':
         fpath = filename.split('/')
-
+        
         if fpath[1] == 'GraphQL':
             fpath[1] == 'Social Media Data'
         elif fpath[1] == 'NLP':
@@ -41,8 +42,7 @@ def notification(toaddr, case, filename, links, sessionURL):
             fpath[2] = 'Python NetworkX'
         elif fpath[2] == 'classification':
             fpath[2] = 'Text Classification'
-        elif fpath[2] == 'AutoPhrase':
-            fpath[2] = 'NLP Auto-Phrase'
+            
 
     if case == 0 or case == 'comment-fail':
         html = """
@@ -72,10 +72,7 @@ def notification(toaddr, case, filename, links, sessionURL):
                             <p>Dear user (session ID: """ + fpath[0] + """),</p>
                             <p>Your Reddit Comment collection is exceeding 400 Megabyte, and is terminated due to lack of disk space.</p>
                             <ul>
-                                <li>You have requested comments and replies for the Reddit Submission (Post):<b>""" + \
-               fpath[
-                   3] + """</b>. The partial comments we manage to collect and save will be compressed for you in an .zip file named <a href='""" + links + """'>""" + \
-               fpath[3] + """-comments.zip</a> (click)</li>    
+                                <li>You have requested comments and replies for the Reddit Submission (Post):<b>""" + fpath[3] + """</b>. The partial comments we manage to collect and save will be compressed for you in an .zip file named <a href='""" + links + """'>""" + fpath[3] + """-comments.zip</a> (click)</li>    
                                 <li>In order to download this file, you need to first locate the original submission in the <b>HISTORY</b> page in SMILE.
                                    <a href=""" + sessionURL + """>Go to your session...</a> 
                                 <ul>
@@ -102,15 +99,12 @@ def notification(toaddr, case, filename, links, sessionURL):
                             <p>Dear user (session ID: """ + fpath[0] + """),</p>
                             <p>Your Reddit Comment collection is ready for you!</p>
                             <ul>
-                                <li>You have requested comments and replies for the Reddit Submission (Post):<b>""" + \
-               fpath[
-                   3] + """</b>. It will be compressed for you in an .zip file named <a href='""" + links + """'>""" + \
-               fpath[3] + """-comments.zip</a></li>    
+                                <li>You have requested comments and replies for the Reddit Submission (Post):<b>""" + fpath[3] + """</b>. It will be compressed for you in an .zip file named <a href='""" + links + """'>"""+ fpath[3] +"""-comments.zip</a></li>    
                                 <li>In order to download this file, you need to first locate the original submission in the <b>HISTORY</b> page in SMILE.
                                 <a href=""" + sessionURL + """>Go to your session...</a>
                                 <ul>
                                     <li>Go to <b>History</b></li> 
-                                    <li>--> under <b>""" + fpath[1] + """</b></li> 
+                                    <li>--> under <b>""" + fpath[1] +"""</b></li> 
                                     <li>--> click <b>""" + fpath[2] + """</b></li> 
                                     <li>--> then find <b>""" + fpath[3] + """</b></li>
                                     <li>--> click <b>VIEW</b></li> 
@@ -127,16 +121,14 @@ def notification(toaddr, case, filename, links, sessionURL):
     elif case == 3 or case == 'analytics-success':
         list_html = ''
         for key in links.keys():
-            list_html += '<li><a href="' + links[
-                key] + '">' + key + '</a></li>'
-
+            list_html += '<li><a href="' + links[key] + '">' + key + '</a></li>'
+            
         html = """<html> 
                     <head></head>
                     <body style="font-size:15px;font-fiamily:'Times New Roman', Times, serif;">
                         <div>
                             <p>Dear user (session ID: """ + fpath[0] + """),</p>
-                            <p>Your """ + fpath[
-            2] + """ results are ready for you! (job ID: """ + fpath[3] + """)</p>
+                            <p>Your """ + fpath[2] + """ results are ready for you! (job ID: """ + fpath[3] + """)</p>
                             <ul>
                                 <li>You can view the visualization and download the results at <b>HISTORY</b> page in SMILE. 
                                 <a href=""" + sessionURL + """>Go to your session...</a>
@@ -159,8 +151,9 @@ def notification(toaddr, case, filename, links, sessionURL):
                     </body>
             </html>"""
         subject = 'Your ' + fpath[2] + ' computation is completed!'
-
-    password = '***REMOVED***'
+        
+    with open('email_password.txt') as f:
+        password = f.readlines()[0]
 
     msg = MIMEMultipart('alternative')
     msg['Subject'] = subject
@@ -169,6 +162,6 @@ def notification(toaddr, case, filename, links, sessionURL):
     msg.attach(MIMEText(html, 'html'))
 
     server = smtplib.SMTP_SSL(host, port)
-    server.login(fromaddr, password)
+    server.login(fromaddr,password)
     server.sendmail(fromaddr, toaddr, msg.as_string())
     server.quit()

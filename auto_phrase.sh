@@ -1,7 +1,68 @@
 #!/bin/bash
-# record input parameters for later use
-REMOTE_READ_PATH=$1
-COLUMN=$2
+
+for key in "$@"
+do
+case $key in
+    --remoteReadPath)
+    REMOTE_READ_PATH="$2"
+    shift # past argument
+    shift # past value
+    ;;
+    --column)
+    COLUMN="$2"
+    shift # past argument
+    shift # past value
+    ;;
+    --resultPath)
+    RESULTPATH="$2"
+    shift
+    shift
+    ;;
+    --minSup)
+    MIN_SUP="$2"
+    shift # past argument
+    shift # past value
+    ;;
+    --uid)
+    UUID="$2"
+    shift # past argument
+    shift # pass value
+    ;;
+     --s3FolderName)
+    S3FOLDERNAME="$2"
+    shift # past argument
+    shift # pass value
+    ;;
+    --email)
+    EMAIL="$2"
+    shift # past argument
+    shift # pass value
+    ;;
+    --sessionURL)
+    SESSIONURL="$2"
+    shift # past argument
+    shift # pass value
+    ;;
+    --algorithm)
+    ALGORITHM="$2"
+    shift
+    shift
+    ;;
+    *)
+
+    ;;
+esac
+done
+set -- "${POSITIONAL[@]}" # restore positional parameters
+
+echo $REMOTE_READ_PATH
+echo $COLUMN
+echo $MIN_SUP
+echo $UUID
+echo $S3FOLDERNAME
+echo $EMAIL
+echo $SESSIONURL
+
 
 ### Get input file from s3 bucket ###
 python3 generate_raw_train.py --remoteReadPath ${REMOTE_READ_PATH} --column ${COLUMN}
@@ -21,7 +82,7 @@ FIRST_RUN=1
 ENABLE_POS_TAGGING=1
 
 # A hard threshold of raw frequency is specified for frequent phrase mining, which will generate a candidate set.
-MIN_SUP=$3
+
 
 # You can also specify how many threads can be used for AutoPhrase
 THREAD=10
@@ -125,9 +186,6 @@ python3 word_cloud.py
 
 ### upload results to s3 bucket ###
 echo ${green}===Upload Results to S3 Bucket===${reset}
-REMOTE_SAVE_PATH=$4
-EMAIL=$5
-SESSIONURL=$6
-python3 upload_results.py --remoteSavePath ${REMOTE_SAVE_PATH} --remoteReadPath ${REMOTE_READ_PATH} --column ${COLUMN} --minSup ${MIN_SUP} --email ${EMAIL} --sessionURL ${SESSIONURL}
+python3 upload_results.py --uid ${UUID} --s3FolderName ${S3FOLDERNAME} --remoteReadPath ${REMOTE_READ_PATH} --column ${COLUMN} --minSup ${MIN_SUP} --email ${EMAIL} --sessionURL ${SESSIONURL}
 
 
