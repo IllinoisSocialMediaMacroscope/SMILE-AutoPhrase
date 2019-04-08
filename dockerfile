@@ -4,7 +4,7 @@ RUN mkdir -p /scripts
 WORKDIR /scripts
 
 # copy paste scripts
-COPY *.* ./
+COPY . ./
 
 # install dependency libraries
 RUN apt-get update

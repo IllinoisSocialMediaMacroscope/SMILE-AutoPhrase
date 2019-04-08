@@ -1,0 +1,4 @@
+docker run smile_autophrase_dev /bin/bash auto_phrase.sh --remoteReadPath cwang138/GraphQL/reddit-Post/uiuc-subreddit/ \
+--s3FolderName cwang138 --column title --resultPath /NLP/autophrase/ --email \
+cwang138@illinois.edu --uid d32035fa-9df4-4d2e-869c-f90af1ac389c --sessionURL \
+http://localhost:8001/autophrase --minSup 3 --algorithm autophrase
