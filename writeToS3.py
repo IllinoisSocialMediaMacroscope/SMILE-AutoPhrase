@@ -52,7 +52,6 @@ def putObject(body, remoteKey):
                             Body=body, Key=remoteKey)
     print(obj['Body'].read())
 
-
 def listDir(remoteClass):
     objects = client.list_objects(Bucket=bucket_name,
                                   Prefix=remoteClass,

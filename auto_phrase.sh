@@ -13,6 +13,11 @@ case $key in
     shift # past argument
     shift # past value
     ;;
+    --resultPath)
+    RESULTPATH="$2"
+    shift
+    shift
+    ;;
     --minSup)
     MIN_SUP="$2"
     shift # past argument
@@ -37,6 +42,11 @@ case $key in
     SESSIONURL="$2"
     shift # past argument
     shift # pass value
+    ;;
+    --algorithm)
+    ALGORITHM="$2"
+    shift
+    shift
     ;;
     *)
 
