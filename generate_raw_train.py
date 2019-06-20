@@ -9,7 +9,7 @@ def main(remoteReadPath, column):
 
     Array = []
     try:
-        with open('data/' + filename,'r',encoding="utf-8") as f:
+        with open('data/' + filename,'r',encoding="utf-8", errors="ignore") as f:
             reader = csv.reader(f)
             try:
                 for row in reader:
@@ -17,7 +17,7 @@ def main(remoteReadPath, column):
             except Exception as e:
                 pass
     except:
-        with open('data/' + filename,'r',encoding="ISO-8859-1") as f:
+        with open('data/' + filename,'r',encoding="ISO-8859-1", errors="ignore") as f:
             reader = csv.reader(f)
             try:
                 for row in reader:
