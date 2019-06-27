@@ -9,7 +9,7 @@ def upload(localpath, remotepath, filename):
     content_type = mimetypes.guess_type(os.path.join(localpath,filename))[0]
     print(filename, content_type)
     if content_type == None:
-        extra_args = {'ContentType':'application/json'}
+        extra_args = {'ContentType': 'application/octet-stream'}
     else:
         extra_args = {'ContentType':content_type}
     
