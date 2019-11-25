@@ -81,7 +81,7 @@ if __name__ == '__main__':
         lines = f.readlines()
         for row in lines:
             for i in range(len(phrases)):
-                if str(row).lower().find(phrases[i]):
+                if str(row).lower().find(phrases[i]) > 0:
                     phrase_count[i] += 1
 
     phrase_count_norm = [float(i) / max(phrase_count) for i in phrase_count]
