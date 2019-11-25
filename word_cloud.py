@@ -70,6 +70,19 @@ if __name__ == '__main__':
 
     phrases = pd.read_csv('./results/AutoPhrase.txt', delimiter='\t', header=None,
                           names=['ranking_score', 'phrases'])
-    words = list(phrases['phrases'].values[:30])
-    scores = list(phrases['ranking_score'].values[:30])
-    word_cloud(words, scores)
+
+    # instead of directly plotting the words with the existing socre we need to first get all the words that have
+    # score bigger than 0.9;
+    # then get their frequency and plot based on their frequeny
+    phrases = phrases[phrases.ranking_score >= 0.9]['phrases'].to_list()
+    phrase_count = [0 for p in phrases]
+
+    with open("data/raw_train.txt", encoding='utf-8', errors='ignore') as f:
+        lines = f.readlines()
+        for row in lines:
+            for i in range(len(phrases)):
+                if str(row).lower().find(phrases[i]):
+                    phrase_count[i] += 1
+
+    phrase_count_norm = [float(i) / max(phrase_count) for i in phrase_count]
+    word_cloud(phrases, phrase_count_norm)
