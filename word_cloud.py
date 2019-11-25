@@ -12,7 +12,7 @@ def word_cloud(words, scores):
     frequency = [(((x - min(scores)) / (max(scores) - min(scores))) ** 4) * (
                 upper - lower) + lower for x in scores]
     print(frequency)
-    colors = [py.colors.DEFAULT_PLOTLY_COLORS[random.randrange(1, len(scores))] for
+    colors = [py.colors.DEFAULT_PLOTLY_COLORS[random.randrange(1, 10)] for
               i in range(len(scores))]
 
     # set location
