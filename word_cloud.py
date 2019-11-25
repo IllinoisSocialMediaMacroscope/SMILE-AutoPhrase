@@ -11,12 +11,13 @@ def word_cloud(words, scores):
     lower, upper = 8, 25
     frequency = [(((x - min(scores)) / (max(scores) - min(scores))) ** 4) * (
                 upper - lower) + lower for x in scores]
-    colors = [py.colors.DEFAULT_PLOTLY_COLORS[random.randrange(1, 10)] for
-              i in range(30)]
+    print(frequency)
+    colors = [py.colors.DEFAULT_PLOTLY_COLORS[random.randrange(1, len(scores))] for
+              i in range(len(scores))]
 
     # set location
     x = list(np.arange(0, 10, 0.5))
-    y = [i for i in range(30)]
+    y = [i for i in range(len(scores))]
     random.shuffle(x)
     random.shuffle(y)
 
@@ -84,5 +85,5 @@ if __name__ == '__main__':
                 if str(row).lower().find(phrases[i]) > 0:
                     phrase_count[i] += 1
 
-    phrase_count_norm = [float(i) / max(phrase_count) for i in phrase_count]
-    word_cloud(phrases, phrase_count_norm)
+    phrase_count.sort(reverse=True)
+    word_cloud(phrases, phrase_count)
