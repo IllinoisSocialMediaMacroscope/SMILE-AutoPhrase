@@ -38,7 +38,7 @@ def word_cloud(words, scores):
 
     layout = go.Layout(
         {
-            'title': 'Phrases with confidence score > 0.9',
+            'title': 'Phrases with confidence score > 0.8',
             'font': {'size': 12},
             'xaxis':
                 {
