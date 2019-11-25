@@ -74,7 +74,7 @@ if __name__ == '__main__':
     # instead of directly plotting the words with the existing socre we need to first get all the words that have
     # score bigger than 0.9;
     # then get their frequency and plot based on their frequeny
-    phrases = phrases[phrases.ranking_score >= 0.9]['phrases'].to_list()
+    phrases = phrases[phrases.ranking_score >= 0.8]['phrases'].to_list()
     phrase_count = [0 for p in phrases]
 
     with open("data/raw_train.txt", encoding='utf-8', errors='ignore') as f:
