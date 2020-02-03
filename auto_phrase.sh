@@ -48,21 +48,32 @@ case $key in
     shift
     shift
     ;;
+    --HOST_IP)
+    HOST_IP="$2"
+    shift
+    shift
+    ;;
+    --AWS_ACCESSKEY)
+    AWS_ACCESSKEY="$2"
+    shift
+    shift
+    ;;
+    --AWS_ACCESSKEYSECRET)
+    AWS_ACCESSKEYSECRET="$2"
+    shift
+    shift
+    ;;
+    --BUCKET_NAME)
+    BUCKET_NAME="$2"
+    shift
+    shift
+    ;;
     *)
 
     ;;
 esac
 done
 set -- "${POSITIONAL[@]}" # restore positional parameters
-
-echo $REMOTE_READ_PATH
-echo $COLUMN
-echo $MIN_SUP
-echo $UUID
-echo $S3FOLDERNAME
-echo $EMAIL
-echo $SESSIONURL
-
 
 ### Get input file from s3 bucket ###
 python3 generate_raw_train.py --remoteReadPath ${REMOTE_READ_PATH} --column ${COLUMN}
@@ -186,6 +197,9 @@ python3 word_cloud.py
 
 ### upload results to s3 bucket ###
 echo ${green}===Upload Results to S3 Bucket===${reset}
-python3 upload_results.py --uid ${UUID} --s3FolderName ${S3FOLDERNAME} --remoteReadPath ${REMOTE_READ_PATH} --column ${COLUMN} --minSup ${MIN_SUP} --email ${EMAIL} --sessionURL ${SESSIONURL}
+python3 upload_results.py --uid ${UUID} --s3FolderName ${S3FOLDERNAME} --remoteReadPath ${REMOTE_READ_PATH} \
+--column ${COLUMN} --minSup ${MIN_SUP} --email ${EMAIL} --sessionURL ${SESSIONURL} \
+--HOST_IP ${HOST_IP} --AWS_ACCESSKEY ${AWS_ACCESSKEY} --AWS_ACCESSKEYSECRET ${AWS_ACCESSKEYSECRET} \
+--BUCKET_NAME ${BUCKET_NAME}
 
 

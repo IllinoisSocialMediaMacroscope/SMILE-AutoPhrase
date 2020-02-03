@@ -1,72 +1,83 @@
-import boto3
-import os
 import mimetypes
+import os
 
-client = boto3.client('s3')
-bucket_name = 'macroscope-smile'
-
-def upload(localpath, remotepath, filename):
-    content_type = mimetypes.guess_type(os.path.join(localpath,filename))[0]
-    print(filename, content_type)
-    if content_type == None:
-        extra_args = {'ContentType': 'application/octet-stream'}
-    else:
-        extra_args = {'ContentType':content_type}
-    
-    client.upload_file(os.path.join(localpath, filename),
-                       bucket_name,
-                       os.path.join(remotepath, filename),
-                       ExtraArgs=extra_args)
+import boto3
+from botocore.client import Config
 
 
-def createDirectory(DirectoryName):
-    client.put_object(Bucket=bucket_name, Key=DirectoryName)
+class WriteToS3:
 
+    def __init__(self, HOST_IP=None, AWS_ACCESSKEY=None, AWS_ACCESSKEYSECRET=None, BUCKET_NAME=None):
 
-def generate_downloads(remotepath, filename):
-    url = client.generate_presigned_url(
-                ClientMethod='get_object',
-                Params={
-                    'Bucket': bucket_name,
-                    'Key': os.path.join(remotepath, filename)
-                },
-                ExpiresIn=604800  # one week
-    )
+        # local minio s3
+        if HOST_IP and AWS_ACCESSKEY and AWS_ACCESSKEYSECRET and BUCKET_NAME:
+            self.client = boto3.client('s3', endpoint_url='http://' + HOST_IP + ':9000',
+                                       aws_access_key_id=AWS_ACCESSKEY,
+                                       aws_secret_access_key=AWS_ACCESSKEYSECRET,
+                                       config=Config(signature_version='s3v4'))
+            self.bucket_name = BUCKET_NAME
 
-    return url
+        # remote aws s3
+        else:
+            self.client = boto3.client('s3')
+            self.bucket_name = 'macroscope-smile'
 
+    def upload(self, localpath, remotepath, filename):
+        content_type = mimetypes.guess_type(os.path.join(localpath, filename))[0]
+        print(filename, content_type)
+        if content_type == None:
+            extra_args = {'ContentType': 'application/octet-stream'}
+        else:
+            extra_args = {'ContentType': content_type}
 
-def downloadToDisk(filename, localpath, remotepath):
-    with open(os.path.join(localpath, filename), 'wb') as f:
-        client.download_fileobj(bucket_name,
-                                os.path.join(remotepath, filename), f)
+        self.client.upload_file(os.path.join(localpath, filename),
+                                self.bucket_name,
+                                os.path.join(remotepath, filename),
+                                ExtraArgs=extra_args)
 
+    def createDirectory(self, DirectoryName):
+        self.client.put_object(Bucket=self.bucket_name, Key=DirectoryName)
 
-def getObject(remoteKey):
-    obj = client.get_object(Bucket=bucket_name, Key=remoteKey)
+    def generate_downloads(self, remotepath, filename):
+        url = self.client.generate_presigned_url(
+            ClientMethod='get_object',
+            Params={
+                'Bucket': self.bucket_name,
+                'Key': os.path.join(remotepath, filename)
+            },
+            ExpiresIn=604800  # one week
+        )
 
+        return url
 
-def putObject(body, remoteKey):
-    # bytes or seekable file-like object
-    obj = client.put_object(Bucket=bucket_name,
-                            Body=body, Key=remoteKey)
-    print(obj['Body'].read())
+    def downloadToDisk(self, filename, localpath, remotepath):
+        with open(os.path.join(localpath, filename), 'wb') as f:
+            self.client.download_fileobj(self.bucket_name,
+                                         os.path.join(remotepath, filename), f)
 
-def listDir(remoteClass):
-    objects = client.list_objects(Bucket=bucket_name,
-                                  Prefix=remoteClass,
-                                  Delimiter='/')
-    foldernames = []
-    for o in objects.get('CommonPrefixes'):
-        foldernames.append(o.get('Prefix'))
+    def getObject(self, remoteKey):
+        obj = self.client.get_object(Bucket=self.bucket_name, Key=remoteKey)
 
-    # only return the list of foldernames
-    return foldernames
+    def putObject(self, body, remoteKey):
+        # bytes or seekable file-like object
+        obj = self.client.put_object(Bucket=self.bucket_name,
+                                     Body=body, Key=remoteKey)
+        print(obj['Body'].read())
 
+    def listDir(self, remoteClass):
+        objects = self.client.list_objects(Bucket=self.bucket_name,
+                                           Prefix=remoteClass,
+                                           Delimiter='/')
+        foldernames = []
+        for o in objects.get('CommonPrefixes'):
+            foldernames.append(o.get('Prefix'))
 
-def listFiles(foldernames):
-    objects = client.list_objects(Bucket=bucket_name,
-                                  Prefix=foldernames)
+        # only return the list of foldernames
+        return foldernames
 
-    # return rich information about the files
-    return objects.get('Contents')
+    def listFiles(self, foldernames):
+        objects = self.client.list_objects(Bucket=self.bucket_name,
+                                           Prefix=foldernames)
+
+        # return rich information about the files
+        return objects.get('Contents')
