@@ -76,7 +76,9 @@ done
 set -- "${POSITIONAL[@]}" # restore positional parameters
 
 ### Get input file from s3 bucket ###
-python3 generate_raw_train.py --remoteReadPath ${REMOTE_READ_PATH} --column ${COLUMN}
+python3 generate_raw_train.py --remoteReadPath ${REMOTE_READ_PATH} --column ${COLUMN} \
+--HOST_IP ${HOST_IP} --AWS_ACCESSKEY ${AWS_ACCESSKEY} --AWS_ACCESSKEYSECRET ${AWS_ACCESSKEYSECRET} \
+--BUCKET_NAME ${BUCKET_NAME}
 
 ### configuration ###
 RESULTS="results"
