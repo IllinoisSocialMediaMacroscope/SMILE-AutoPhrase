@@ -28,7 +28,7 @@ case $key in
     shift # past argument
     shift # pass value
     ;;
-     --s3FolderName)
+    --s3FolderName)
     S3FOLDERNAME="$2"
     shift # past argument
     shift # pass value
@@ -69,7 +69,6 @@ case $key in
     shift
     ;;
     *)
-
     ;;
 esac
 done

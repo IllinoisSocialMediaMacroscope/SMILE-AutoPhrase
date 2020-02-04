@@ -37,6 +37,13 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--remoteReadPath', required=True)
     parser.add_argument('--column', required=True)
+
+    # user specified parameters
+    parsed, unknown = parser.parse_known_args()
+    for arg in unknown:
+        if arg.startswith("--"):
+            parser.add_argument(arg, required=False)
+
     params = vars(parser.parse_args())
 
     if 'HOST_IP' in params.keys():
