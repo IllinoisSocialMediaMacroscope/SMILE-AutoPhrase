@@ -76,7 +76,13 @@ done
 set -- "${POSITIONAL[@]}" # restore positional parameters
 
 ### Get input file from s3 bucket ###
-python3 generate_raw_train.py --remoteReadPath ${REMOTE_READ_PATH} --column ${COLUMN}
+if [ -n "${HOST_IP}" ] && [ -n "${AWS_ACCESSKEY}" ] && [ -n "${AWS_ACCESSKEYSECRET}" ] && [ -n "${BUCKET_NAME}" ] ; then
+    python3 generate_raw_train.py --remoteReadPath ${REMOTE_READ_PATH} --column ${COLUMN} \
+    --HOST_IP ${HOST_IP} --AWS_ACCESSKEY ${AWS_ACCESSKEY} --AWS_ACCESSKEYSECRET ${AWS_ACCESSKEYSECRET} \
+    --BUCKET_NAME ${BUCKET_NAME}
+else
+    python3 generate_raw_train.py --remoteReadPath ${REMOTE_READ_PATH} --column ${COLUMN}
+fi
 
 ### configuration ###
 RESULTS="results"
@@ -197,9 +203,12 @@ python3 word_cloud.py
 
 ### upload results to s3 bucket ###
 echo ${green}===Upload Results to S3 Bucket===${reset}
-python3 upload_results.py --uid ${UUID} --s3FolderName ${S3FOLDERNAME} --remoteReadPath ${REMOTE_READ_PATH} \
---column ${COLUMN} --minSup ${MIN_SUP} --email ${EMAIL} --sessionURL ${SESSIONURL} \
---HOST_IP ${HOST_IP} --AWS_ACCESSKEY ${AWS_ACCESSKEY} --AWS_ACCESSKEYSECRET ${AWS_ACCESSKEYSECRET} \
---BUCKET_NAME ${BUCKET_NAME}
-
-
+if [ -n "${HOST_IP}" ] && [ -n "${AWS_ACCESSKEY}" ] && [ -n "${AWS_ACCESSKEYSECRET}" ] && [ -n "${BUCKET_NAME}" ] ; then
+    python3 upload_results.py --uid ${UUID} --s3FolderName ${S3FOLDERNAME} --remoteReadPath ${REMOTE_READ_PATH} \
+    --column ${COLUMN} --minSup ${MIN_SUP} --email ${EMAIL} --sessionURL ${SESSIONURL} \
+    --HOST_IP ${HOST_IP} --AWS_ACCESSKEY ${AWS_ACCESSKEY} --AWS_ACCESSKEYSECRET ${AWS_ACCESSKEYSECRET} \
+    --BUCKET_NAME ${BUCKET_NAME}
+else
+    python3 upload_results.py --uid ${UUID} --s3FolderName ${S3FOLDERNAME} --remoteReadPath ${REMOTE_READ_PATH} \
+    --column ${COLUMN} --minSup ${MIN_SUP} --email ${EMAIL} --sessionURL ${SESSIONURL}
+fi
